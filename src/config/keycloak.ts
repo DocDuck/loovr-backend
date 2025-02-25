@@ -13,7 +13,7 @@ const sessionConfig = {
 const keycloakConfig = {
   realm: 'loovr-realm',
   'auth-server-url': process.env.KEYCLOAK_URL!,
-  resource: 'excalidraw-backend',
+  resource: 'loovr-backend',
   'bearer-only': true,
   'ssl-required': 'external',
   'confidential-port': 0,
