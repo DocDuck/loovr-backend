@@ -8,23 +8,18 @@
 git clone https://github.com/DocDuck/loovr-backend
 ```
 
-2. Создаем и онфигурирукм .env: (все креды для входа в кейклок написаны в docker-compose.yml)
+2. Создаем и конфигурирукм .env:
 
 ```dosini
-# SERVER CONFIG
-PORT= # PORT OF THE NODE JS SERVER
-SERVER_URL= # URL OF THE NODE JS SERVER
-
-# EXPRESS SESSION
-SESSION_SECRET= # EXPRESS SESSION SECRET
+# DB CONFIG
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=loovr
+DB_PASSWORD=loovr
+DB_NAME=loovr
 
 # KEYCLOAK
-KEYCLOAK_REALM= # KEYCLOAK REALM ID
-KEYCLOAK_AUTH_SERVER_URL= # KEYCLOAK AUTH SERVER URL
-KEYCLOAK_SSL_REQUIRED= # KEYCLOAK SSL REQUIRED
-KEYCLOAK_RESOURCE= # KEYCLOAK RESOURCE ID
-KEYCLOAK_CREDENTIALS_SECRET= # KEYCLOAK CREDENTIALS SERCRET
-KEYCLOAK_CONFIDENTIAL_PORT= # KEYCLOAK CONFIDENTIAL PORT
+KEYCLOAK_URL=http://keycloak:8080
 ```
 
 3. Запускаем прило в docker-compose:
@@ -32,3 +27,5 @@ KEYCLOAK_CONFIDENTIAL_PORT= # KEYCLOAK CONFIDENTIAL PORT
 ```bash
 docker-compose up --build
 ```
+
+4.
