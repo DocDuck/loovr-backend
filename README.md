@@ -5,7 +5,7 @@
 1. Клонируем:
 
 ```bash
-git clone git@github.com:<>.git
+git clone https://github.com/DocDuck/loovr-backend
 ```
 
 2. Создаем и онфигурирукм .env: (все креды для входа в кейклок написаны в docker-compose.yml)
