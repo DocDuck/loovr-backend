@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KEYCLOAK_URL=http://keycloak:8080
+    depends_on:
+      - postgres
+      - keycloak
+    networks:
+      - loovr-net
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=loovr
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=loovr
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - loovr-net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0.0
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/loovr
+      - KC_DB_USERNAME=loovr
+      - KC_DB_PASSWORD=secret
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - loovr-net
+    command: ["start-dev"]
+
+volumes:
+  postgres-data:
+
+networks:
+  loovr-net:
