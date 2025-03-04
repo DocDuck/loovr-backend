@@ -1,11 +1,12 @@
-import { getRepository, FindOptionsWhere } from 'typeorm';
+import { FindOptionsWhere } from 'typeorm';
 import { Board, User, BoardUser } from '../entities';
 import { UserRole } from '../enums/UserRole.enum'
+import { AppDataSource } from '../config/data-source';
 
 export class BoardService {
-  private boardRepo = getRepository(Board);
-  private userRepo = getRepository(User);
-  private boardUserRepo = getRepository(BoardUser);
+  private boardRepo = AppDataSource.getRepository(Board);
+  private userRepo = AppDataSource.getRepository(User);
+  private boardUserRepo = AppDataSource.getRepository(BoardUser);
 
   async createBoard(userId: string | undefined, data: Partial<Board>) {
     const user = await this.userRepo.findOne({ 

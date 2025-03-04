@@ -1,20 +1,22 @@
 import express from 'express';
-import { keycloak } from '../config/keycloak';
 import { BoardService } from '../services';
 
 const router = express.Router();
 
-router.post('/', keycloak.protect(), async (req, res) => {
+router.post('/', async (req, res) => {
+
   try {
-    const userId = req.kauth.grant?.access_token?.content.sub;;
+    const userId = req.kauth.grant?.access_token?.content.sub;
+    console.log('boards.create', userId, req.body)
     const board = await new BoardService().createBoard(userId, req.body);
+    console.log('boards.create result', board)
     res.status(201).json(board);
   } catch (error) {
     res.status(400).json({ error: (error  as any).message });
   }
 });
 
-router.get('/:id', keycloak.protect(), async (req, res) => {
+router.get('/:id',  async (req, res) => {
   try {
     const board = await new BoardService().getBoard(req.params.id);
     res.json(board);
@@ -23,7 +25,7 @@ router.get('/:id', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.put('/:id', keycloak.protect(), async (req, res) => {
+router.put('/:id',  async (req, res) => {
   try {
     const userId = req.kauth.grant?.access_token?.content.sub;
     const board = await new BoardService().updateBoard(
@@ -41,10 +43,13 @@ router.put('/:id', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.delete('/:id', keycloak.protect(), async (req, res) => {
+router.delete('/:id',  async (req, res) => {
   try {
-    const userId = req.kauth.grant?.access_token?.content.sub;;
-    await new BoardService().deleteBoard(req.params.id, userId);
+    const userId = req.kauth.grant?.access_token?.content.sub;
+    console.log('boards.delete', req.params.id, userId)
+    const result =  await new BoardService().deleteBoard(req.params.id, userId);
+    console.log('boards.delete result', result)
+
     res.status(204).end();
   } catch (error) {
       if (error instanceof Error) {
@@ -55,12 +60,14 @@ router.delete('/:id', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.get('/', keycloak.protect(), async (req, res) => {
+router.get('/',  async (req, res) => {
   try {
-    const userId = req.kauth.grant?.access_token?.content.sub;;
+    const userId = req.kauth.grant?.access_token?.content.sub;
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
+    console.log('boards.get', {userId, page, limit})
     const result = await new BoardService().listBoards(userId, page, limit);
+    console.log('boards.get result', result)
     res.json(result);
   } catch (error) {
       if (error instanceof Error) {
@@ -71,7 +78,7 @@ router.get('/', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.post('/:id/share', keycloak.protect(), async (req, res) => {
+router.post('/:id/share',  async (req, res) => {
   try {
     const userId = req.kauth.grant?.access_token?.content.sub;;
     const result = await new BoardService().shareBoard(

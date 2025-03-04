@@ -1,5 +1,4 @@
 import express from 'express';
-import { keycloak } from '../config/keycloak';
 import { UserService } from '../services';
 import fileUpload from 'express-fileupload';
 
@@ -9,7 +8,7 @@ router.use(fileUpload({
   abortOnLimit: true
 }));
 
-router.get('/me', keycloak.protect(), async (req, res) => {
+router.get('/me', async (req, res) => {
   try {
     const userId = req.kauth.grant?.access_token?.content.sub;
     const user = await new UserService().getProfile(userId);
@@ -23,7 +22,7 @@ router.get('/me', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.patch('/me', keycloak.protect(), async (req, res) => {
+router.patch('/me', async (req, res) => {
   try {
     const userId = req.kauth.grant?.access_token?.content.sub;
     const user = await new UserService().updateProfile(userId, req.body);
@@ -37,7 +36,7 @@ router.patch('/me', keycloak.protect(), async (req, res) => {
   }
 });
 
-router.post('/me/avatar', keycloak.protect(), async (req, res) => {
+router.post('/me/avatar',  async (req, res) => {
   try {
     if (!req.files?.avatar) throw new Error('No file uploaded');
     

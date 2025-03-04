@@ -27,6 +27,8 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:21.0.0
     environment:
+      - KC_HTTP_OPTIONS=--http-cors=true
+      - KC_HTTP_CORS_ORIGINS=https://localhost:5173
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_DB=postgres
@@ -39,10 +41,11 @@ services:
       - postgres
     networks:
       - loovr-net
-    command: ["start-dev"]
+    command: [ "start-dev" ]
 
 volumes:
   postgres-data:
+
 
 networks:
   loovr-net:

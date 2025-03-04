@@ -10,15 +10,13 @@ const sessionConfig = {
   store: memoryStore,
 };
 
-const keycloakConfig = {
-  realm: 'loovr-realm',
-  'auth-server-url': process.env.KEYCLOAK_URL!,
-  resource: 'loovr-backend',
-  'bearer-only': true,
-  'ssl-required': 'external',
-  'confidential-port': 0,
-};
+const createKeycloakInstance = (config: {
+    realm: string;
+    'auth-server-url': string;
+    resource: string;
+    'bearer-only': boolean;
+    'ssl-required': string;
+    'confidential-port': number;
+}) => new Keycloak({ store: memoryStore }, config);
 
-const keycloak = new Keycloak({ store: memoryStore }, keycloakConfig);
-
-export { keycloak, sessionConfig };
+export { createKeycloakInstance, sessionConfig };

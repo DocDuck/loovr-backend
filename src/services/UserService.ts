@@ -1,13 +1,14 @@
-import { getRepository, FindOptionsWhere } from 'typeorm';
+import { FindOptionsWhere } from 'typeorm';
 import { User } from '../entities/User.entity';
 import { UploadedFile } from 'express-fileupload';
 import path from 'path';
 import fs from 'fs';
+import { AppDataSource } from '../config/data-source';
 
 type UpdatedUser = Pick<Partial<User>, 'name' | 'email' | 'avatarUrl'>
 
 export class UserService {
-  private userRepo = getRepository(User);
+  private userRepo = AppDataSource.getRepository(User);
   private uploadPath = path.join(__dirname, '../../uploads');
 
   async getProfile(userId: string | undefined) {
