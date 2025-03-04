@@ -6,9 +6,10 @@ const router = express.Router();
 router.post('/', async (req, res) => {
 
   try {
-    const userId = req.kauth.grant?.access_token?.content.sub;
-    console.log('boards.create', userId, req.body)
-    const board = await new BoardService().createBoard(userId, req.body);
+    // const userId = req.kauth.grant?.access_token?.content.sub;
+    // console.log('boards.create', userId, req.body)
+    // const board = await new BoardService().createBoard(userId, req.body);
+    const board = await new BoardService().createBoard(req.body);
     console.log('boards.create result', board)
     res.status(201).json(board);
   } catch (error) {
@@ -66,7 +67,8 @@ router.get('/',  async (req, res) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     console.log('boards.get', {userId, page, limit})
-    const result = await new BoardService().listBoards(userId, page, limit);
+    // const result = await new BoardService().listBoards(userId, page, limit);
+    const result = await new BoardService().listBoards( page, limit);
     console.log('boards.get result', result)
     res.json(result);
   } catch (error) {

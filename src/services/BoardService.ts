@@ -8,21 +8,18 @@ export class BoardService {
   private userRepo = AppDataSource.getRepository(User);
   private boardUserRepo = AppDataSource.getRepository(BoardUser);
 
-  async createBoard(userId: string | undefined, data: Partial<Board>) {
-    const user = await this.userRepo.findOne({ 
-      where: { id: userId } as FindOptionsWhere<User>
-    });
-    if (!user) throw new Error('User not found');
-
+  async createBoard(data: Partial<Board>) {
+    // const user = await this.userRepo.findOne({ 
+    //   where: { id: userId } as FindOptionsWhere<User>
+    // });
+    // if (!user) throw new Error('User not found');
     const board = this.boardRepo.create(data);
     const savedBoard = await this.boardRepo.save(board);
-
-    await this.boardUserRepo.save({
-      user,
-      board: savedBoard,
-      role: UserRole.ADMIN
-    });
-
+    // await this.boardUserRepo.save({
+    //   user,
+    //   board: savedBoard,
+    //   role: UserRole.ADMIN
+    // });
     return savedBoard;
   }
 
@@ -51,16 +48,25 @@ export class BoardService {
     return { message: 'Board deleted' };
   }
 
-  async listBoards(userId: string | undefined, page: number = 1, limit: number = 10) {
-    const [items, count] = await this.boardUserRepo.findAndCount({
-      where: { user: { id: userId } } as FindOptionsWhere<BoardUser>,
-      relations: ['board'],
+  //async listBoards(userId: string | undefined, page: number = 1, limit: number = 10) {
+    // const [items, count] = await this.boardUserRepo.findAndCount({
+    //   where: { user: { id: userId } } as FindOptionsWhere<BoardUser>,
+    //   relations: ['board'],
+    //   skip: (page - 1) * limit,
+    //   take: limit,
+  // });
+  async listBoards(page: number = 1, limit: number = 10) {
+    const [items, count] = await this.boardRepo.findAndCount({
+      // TODO вернуть комменченое после того как с юзером и кейклоком разберемся
+      // where: { user: { id: userId } } as FindOptionsWhere<BoardUser>,
+      // relations: ['board'],
       skip: (page - 1) * limit,
       take: limit,
     });
 
     return {
-      data: items.map(bu => bu.board),
+      //data: items.map(bu => bu.board),
+      data: items,
       meta: {
         page,
         limit,
