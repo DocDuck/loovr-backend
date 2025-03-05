@@ -10,23 +10,22 @@ git clone https://github.com/DocDuck/loovr-backend
 
 2. Создаем и конфигурирукм .env:
 
-```dosini
-# DB CONFIG
+````dosini
 DB_HOST=postgres
 DB_PORT=5432
 DB_USER=loovr
-DB_PASSWORD=loovr
+DB_PASSWORD=secret
 DB_NAME=loovr
-
-# KEYCLOAK
+FRONTEND_URL=https://localhost:5173
 KEYCLOAK_URL=http://keycloak:8080
-```
+KEYCLOAK_REALM=loovr-realm
+KEYCLOAK_SECRET=sovershenno-sekretno
 
 3. Запускаем прило в docker-compose:
 
 ```bash
 docker-compose up --build
-```
+````
 
 4. Создаем новый реалм в кейклоке
 
