@@ -4,7 +4,6 @@ import { BoardService } from '../services';
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-
   try {
     // const userId = req.kauth.grant?.access_token?.content.sub;
     // console.log('boards.create', userId, req.body)
@@ -26,21 +25,32 @@ router.get('/:id',  async (req, res) => {
   }
 });
 
-router.put('/:id',  async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
     const userId = req.kauth.grant?.access_token?.content.sub;
-    const board = await new BoardService().updateBoard(
-      req.params.id,
-      userId,
-      req.body
-    );
+    const boardService = new BoardService();
+
+    let board;
+    if (req.body.name) {
+      board = await boardService.renameBoard(
+              req.params.id,
+              req.body.name
+      );
+    } else if (req.body.initialData) {
+      board = await boardService.updateInitialDataBoard(
+              req.params.id,
+              req.body.initialData
+      );
+    } else {
+      res.status(400).json({error: "Invalid request: missing 'name' or 'initialData'"});
+    }
     res.json(board);
   } catch (error) {
-      if (error instanceof Error) {
-        res.status(403).json({ error: error.message });
-      } else {
-        res.status(500).json({ error: "Unknown error occurred" });
-      }
+    if (error instanceof Error) {
+      res.status(403).json({error: error.message});
+    } else {
+      res.status(500).json({error: "Unknown error occurred"});
+    }
   }
 });
 

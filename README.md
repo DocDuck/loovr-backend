@@ -15,11 +15,13 @@ git clone https://github.com/DocDuck/loovr-backend
 DB_HOST=postgres
 DB_PORT=5432
 DB_USER=loovr
-DB_PASSWORD=loovr
+DB_PASSWORD=secret
 DB_NAME=loovr
 
 # KEYCLOAK
 KEYCLOAK_URL=http://keycloak:8080
+
+FRONTEND_URL=https://localhost:5173
 ```
 
 3. Запускаем прило в docker-compose:
