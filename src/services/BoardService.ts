@@ -2,6 +2,7 @@ import { FindOptionsWhere } from 'typeorm';
 import { Board, User, BoardUser } from '../entities';
 import { UserRole } from '../enums/UserRole.enum'
 import { AppDataSource } from '../config/data-source';
+import { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types/types";
 
 export class BoardService {
   private boardRepo = AppDataSource.getRepository(Board);
@@ -32,19 +33,33 @@ export class BoardService {
     return board;
   }
 
-  async updateBoard(boardId: string, userId: string | undefined, data: Partial<Board>) {
-    await this.checkPermission(userId, boardId, UserRole.EDITOR);
-    
+  async renameBoard(boardId: string, name: string) {
+    // await this.checkPermission(userId, boardId, UserRole.EDITOR);
+
     await this.boardRepo.update(
       { id: boardId } as FindOptionsWhere<Board>,
-      { ...data, updatedAt: new Date() }
+      { name, updatedAt: new Date() }
     );
-    return this.getBoard(boardId);
+    return this.getBoard(boardId)
+  }
+
+  async updateInitialDataBoard (boardId: string, data: ExcalidrawInitialDataState) {
+    // await this.checkPermission(userId, boardId, UserRole.EDITOR);
+
+    try {
+      await this.boardRepo.update(
+              { id: boardId } as FindOptionsWhere<Board>,
+              { data: data, updatedAt: new Date() })
+      return this.getBoard(boardId)
+    } catch (error) {
+      console.error("Error updating board initial data:", error);
+      throw error;
+    }
   }
 
   async deleteBoard(boardId: string, userId: string | undefined) {
-    await this.checkPermission(userId, boardId, UserRole.ADMIN);
-    await this.boardRepo.softDelete(boardId);
+    //await this.checkPermission(userId, boardId, UserRole.ADMIN);
+    await this.boardRepo.delete(boardId);
     return { message: 'Board deleted' };
   }
 
@@ -78,7 +93,7 @@ export class BoardService {
 
   async shareBoard(boardId: string, userId: string | undefined, targetUserId: string, role: UserRole) {
     await this.checkPermission(userId, boardId, UserRole.ADMIN);
-    
+
     const [board, user] = await Promise.all([
       this.boardRepo.findOne({ where: { id: boardId } }),
       this.userRepo.findOne({ where: { id: targetUserId } })

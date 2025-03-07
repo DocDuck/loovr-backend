@@ -1,6 +1,7 @@
 import { Entity, OneToMany, Column } from 'typeorm';
 import { BoardUser } from './BoardUser.entity';
 import { BaseEntity } from './Base.entity';
+import { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types/types";
 
 @Entity()
 export class Board extends BaseEntity {
@@ -18,5 +19,7 @@ export class Board extends BaseEntity {
 
   @OneToMany(() => BoardUser, (boardUser) => boardUser.board)
   boardUsers?: BoardUser[];
-  
+
+  @Column('jsonb', { default: { elements: [], appState: {} }})
+  data!: ExcalidrawInitialDataState;
 }

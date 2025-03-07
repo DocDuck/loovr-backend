@@ -15,7 +15,7 @@ AppDataSource.initialize().then(() => {
   // Middleware
   const corsOptions ={
     origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true, // access-control-allow-credentials:true
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ["Authorization"], // если фронтенд читает кастомные заголовки
