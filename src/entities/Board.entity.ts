@@ -21,5 +21,5 @@ export class Board extends BaseEntity {
   boardUsers?: BoardUser[];
 
   @Column('jsonb', { default: { elements: [], appState: {} }})
-  initialData!: ExcalidrawInitialDataState;
+  data!: ExcalidrawInitialDataState;
 }

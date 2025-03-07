@@ -43,13 +43,13 @@ export class BoardService {
     return this.getBoard(boardId)
   }
 
-  async updateInitialDataBoard (boardId: string, initialData: ExcalidrawInitialDataState) {
+  async updateInitialDataBoard (boardId: string, data: ExcalidrawInitialDataState) {
     // await this.checkPermission(userId, boardId, UserRole.EDITOR);
 
     try {
       await this.boardRepo.update(
               { id: boardId } as FindOptionsWhere<Board>,
-              { initialData, updatedAt: new Date() })
+              { data: data, updatedAt: new Date() })
       return this.getBoard(boardId)
     } catch (error) {
       console.error("Error updating board initial data:", error);

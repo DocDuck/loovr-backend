@@ -36,13 +36,13 @@ router.patch('/:id', async (req, res) => {
               req.params.id,
               req.body.name
       );
-    } else if (req.body.initialData) {
+    } else if (req.body.data) {
       board = await boardService.updateInitialDataBoard(
               req.params.id,
-              req.body.initialData
+              req.body.data
       );
     } else {
-      res.status(400).json({error: "Invalid request: missing 'name' or 'initialData'"});
+      res.status(400).json({error: "Invalid request: missing 'name' or 'data'"});
     }
     res.json(board);
   } catch (error) {
@@ -79,7 +79,7 @@ router.get('/',  async (req, res) => {
     console.log('boards.get', {userId, page, limit})
     // const result = await new BoardService().listBoards(userId, page, limit);
     const result = await new BoardService().listBoards( page, limit);
-    console.log('boards.get result', result)
+    console.log('boards.get result', JSON.stringify(result, null, 2))
     res.json(result);
   } catch (error) {
       if (error instanceof Error) {
